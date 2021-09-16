@@ -17,6 +17,7 @@ VCS setting the triggered plan will clog the run queue in TFC.
 2. Run the script, make sure it is executable, if not do : `chmod +x script.sh`
 3. You will be prompted for your TFC organization name.
 4. You will be prompted for a TFC user token - this step will add a TFE_TOKEN env variable 
+5. The script is running `terraform import` so depending on the number of workspace it can take a bit longer to execute.
 
 ## End result
 You should ahve a main.tf file containing the configuration and terraform.tfstate file containing the real-life resources.
