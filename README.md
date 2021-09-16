@@ -1,6 +1,6 @@
 # tfe_workspace_config_creator
 
-This script is designed to help spawn a tfe_workspace configuration for your organization in Terraform Cloud(TFC).This could be very helpfull in situations where you have to change the settings of multiple workspaces at once.
+This script is designed to help spawn a tfe_workspace configuration for your organization in Terraform Cloud(TFC).This could be very helpfull in situations where you have to change the settings of multiple workspaces at once as well as for backup purposes.
 
 **Caveats:**
 Every workspace that changes the VCS setting may require a automatic plan in order to setup the webhook. In cases where a big number of workspaces change their 
