@@ -14,18 +14,17 @@ read org_name
 
 echo "Please enter Terraform cloud user token:"
 read TOKEN
-export TOKEN=$TOKEN
 export TFE_TOKEN=$TOKEN
 
 #2. Get a list of all you workspaces IDs
 pages=$(curl -s \
---header "Authorization: Bearer $TOKEN" \
+--header "Authorization: Bearer $TFE_TOKEN" \
 --header "Content-Type: application/vnd.api+json" \
 "https://app.terraform.io/api/v2/organizations/"$org_name"/workspaces?page%5Bsize%5D=100" | jq '.meta.pagination."total-pages"')
 
 for i in {1..$pages}
 do curl -s \
---header "Authorization: Bearer $TOKEN" \
+--header "Authorization: Bearer $TFE_TOKEN" \
 --header "Content-Type: application/vnd.api+json" \
 "https://app.terraform.io/api/v2/organizations/"$org_name"/workspaces?page%5Bsize%5D=100&page%5Bnumber%5D="$i"" | jq -r '.data[] .id'
 done >> list.txt
