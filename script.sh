@@ -23,16 +23,18 @@ read TOKEN
 export TFE_TOKEN=$TOKEN
 
 #2. Get a list of all you workspaces IDs
+
 pages=$(curl -s \
 --header "Authorization: Bearer $TFE_TOKEN" \
 --header "Content-Type: application/vnd.api+json" \
 "https://app.terraform.io/api/v2/organizations/"$org_name"/workspaces?page%5Bsize%5D=100" | jq '.meta.pagination."total-pages"')
 
-for i in {1..$pages}
+for i in $(seq 1 $pages)
 do curl -s \
+--header "Connection: keep-alive" \
 --header "Authorization: Bearer $TFE_TOKEN" \
 --header "Content-Type: application/vnd.api+json" \
-"https://app.terraform.io/api/v2/organizations/"$org_name"/workspaces?page%5Bsize%5D=100&page%5Bnumber%5D="$i"" | jq -r '.data[] .id'
+"https://app.terraform.io/api/v2/organizations/"$org_name"/workspaces?page%5Bsize%5D=100&page%5Bnumber%5D="$i"" | jq -r '.data[] .id' 
 done >> list.txt
 
 #3.Create a main.tf file based on the workspace ID
@@ -90,4 +92,6 @@ end=`date +%s`
 runtime=$((end-start))
 
 echo -e 'Your configuration is ready. The time it took to do the imports was '$runtime' seconds. You have '$(cat list.txt | wc -l )' workspaces'
+
+
  
