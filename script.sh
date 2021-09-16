@@ -7,6 +7,12 @@ then
     exit
 fi
 
+if ! command -v jq &> /dev/null
+then
+    echo -e 'jq command could not be found.Please install terraform first.\nbrew install jq'
+    exit
+fi
+
 echo "Enter your organization name in TFC:"
 read org_name
 
@@ -38,7 +44,7 @@ echo -e 'provider "tfe" {} \r\n' > main.tf
 terraform init
 
 for i in $(cat list.txt)
-do echo 'resource "tfe_workspace" "'$i'" {   
+do echo 'resource "tfe_workspace" "'$i'" { 
      organization = "'$org_name'"  
      name = "name"
      }
@@ -53,6 +59,20 @@ start=`date +%s`
 for i in $(cat list.txt)
 do terraform import tfe_workspace.$i $i
 done
+
+tier=$(curl -s \
+  --header "Authorization: Bearer $TOKEN" \
+  --header "Content-Type: application/vnd.api+json" \
+  --request GET \
+  "https://app.terraform.io/api/v2/organizations/"$org_name"/subscription" | jq -r '.included[] .attributes.name')
+
+if [ "$tier" = "Business" ]; then 
+    for i in $(jq -r '.resources[] .instances[] .attributes.agent_pool_id' terraform.tfstate)
+    do ws=$(grep -B6 $i terraform.tfstate | grep ws- | awk -F '"' '{print $4}'); sed  "s/resource \"tfe_workspace\" \"$ws\" {/resource \"tfe_workspace\" \"$ws\" { | agent_pool_id = \"$i\"/" main.tf | tr '|' '\n' > main1.tf
+    done
+    mv -f main1.tf main.tf
+fi
+
 
 
 terraform plan -no-color --destroy  > main1.tf 
@@ -69,5 +89,5 @@ end=`date +%s`
 
 runtime=$((end-start))
 
-echo -e 'Your configuration is ready. The time it took to do the imports was '$runtime'. You have '$(cat list.txt | wc -l )' workpsaces'
+echo -e 'Your configuration is ready. The time it took to do the imports was '$runtime' seconds. You have '$(cat list.txt | wc -l )' workspaces'
  
