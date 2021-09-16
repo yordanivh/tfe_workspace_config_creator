@@ -49,9 +49,11 @@ done
 
 #5.Now it is time to perforn terraform import to quickly import the workspaces do the following
 
+start=`date +%s`
 for i in $(cat list.txt)
 do terraform import tfe_workspace.$i $i
 done
+
 
 terraform plan -no-color --destroy  > main1.tf 
 
@@ -63,5 +65,9 @@ cat main1.tf | sed "s/ -//g" | sed "s/> null//g" | sed -E '/^ +id +=|^ +operatio
 mv -f main2.tf main.tf
 
 rm -f main1.tf
+end=`date +%s`
 
+runtime=$((end-start))
+
+echo -e 'Your configuration is ready. The time it took to do the imports was '$runtime'. You have '$(cat list.txt | wc -l )' workpsaces'
  
