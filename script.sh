@@ -136,8 +136,20 @@ while [ ! -z "$skipped"];do
 
 done
 
+rm -f skipped.txt list.txt actual.txt 
+
 end=`date +%s`
 
 runtime=$((end-start))
 
 echo -e 'Your configuration is ready. The time it took to do the imports was '$(( $runtime / 60 ))' minutes and '$(( $runtime % 60 ))' seconds. You have '$(cat main.tf | grep 'resource "tfe_workspace"' | wc -l )' workspaces defined'
+
+<<  COMMENT
+Bonus How to add 100 workpsace for testing purposes
+for i in $(seq 1 100);
+do echo 'resource "tfe_workspace" "worky-spacey'$i'" {
+        name                          = "namy'$i'"
+        organization                  = "Yordanh_Tfc4b"
+        }'>> main.tf
+done
+COMMENT
