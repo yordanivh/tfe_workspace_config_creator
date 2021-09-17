@@ -20,7 +20,7 @@ VCS setting the triggered plan will clog the run queue in TFC.
 5. The script is running `terraform import` so depending on the number of workspace it can take a bit longer to execute.
 
 ## End result
-You should ahve a main.tf file containing the configuration and terraform.tfstate file containing the real-life resources.
+You should have a main.tf file containing the configuration and terraform.tfstate file containing the real-life resources.
 Now you can make any changes you would like.
 
 
