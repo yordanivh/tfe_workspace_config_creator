@@ -9,7 +9,7 @@ VCS setting the triggered plan will clog the run queue in TFC.
 ## Prerequisites
 
 1. You will need to have a TFC user token that will be used for API calls and with the TFE provider
-2. You will need to have terraform lattest version installed - it can be downloaded from here
+2. You will need to have terraform lattest version installed - it can be downloaded from [here](https://www.terraform.io/downloads.html)
 
 ## How to use this script
 
