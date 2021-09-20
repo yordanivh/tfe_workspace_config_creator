@@ -9,7 +9,7 @@ fi
 
 if ! command -v jq &> /dev/null
 then
-    echo -e 'jq command could not be found.Please install terraform first.\nbrew install jq'
+    echo -e 'jq command could not be found.Please install jq first.\nbrew install jq'
     exit
 fi
 
